@@ -11,7 +11,7 @@
  Target Server Version : 80019
  File Encoding         : 65001
 
- Date: 24/12/2020 18:44:47
+ Date: 25/12/2020 18:40:37
 */
 
 SET NAMES utf8mb4;
@@ -71,7 +71,7 @@ CREATE TABLE `role`  (
 -- Records of role
 -- ----------------------------
 INSERT INTO `role` VALUES (1, 'admin');
-INSERT INTO `role` VALUES (2, 'customer');
+INSERT INTO `role` VALUES (2, 'user');
 
 -- ----------------------------
 -- Table structure for user
@@ -87,7 +87,7 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, 'admin', '$2a$10$mKi3XaYjvH4/iQnh1/fGfOd2CgxXsN3SseFEfN.ZIWeqpROUXYvhe');
+INSERT INTO `user` VALUES (1, 'admin', '123');
 INSERT INTO `user` VALUES (2, 'demo', '123');
 
 -- ----------------------------

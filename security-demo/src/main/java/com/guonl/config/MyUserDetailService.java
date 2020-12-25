@@ -35,7 +35,7 @@ public class MyUserDetailService implements UserDetailsService {
 
         Set<Role> roles = userEntity.getRoles();
         roles.forEach(x -> {
-            authorities.add(new SimpleGrantedAuthority(x.getRname()));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + x.getRname().toUpperCase()));
         });
 
         User user = new User(userEntity.getUsername(), userEntity.getPassword(), authorities);

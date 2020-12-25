@@ -4,15 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -21,18 +19,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private MyUserDetailService userDetailService;
 
     @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder() {
+            @Override
+            public String encode(CharSequence rawPassword) {
+                return rawPassword.toString();
+            }
+
+            @Override
+            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+                return encodedPassword.equals(rawPassword.toString());
+            }
+        };
     }
 
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 //        auth.inMemoryAuthentication().withUser("admin")
-//                .password(new BCryptPasswordEncoder().encode("123456"))
+//                .password(new BCryptPasswordEncoder().encode("123"))
 //                .roles("USER", "ADMIN");
 //        auth.inMemoryAuthentication().withUser("user")
-//                .password(new BCryptPasswordEncoder().encode("123456"))
+//                .password(new BCryptPasswordEncoder().encode("123"))
 //                .roles("USER");
 //        super.configure(auth);
 
@@ -42,19 +50,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-
-
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.authorizeRequests()
-//                .antMatchers("/css/**", "/js/**", "/fonts/**", "/index").permitAll()  // 虽都可以访问
-//                .antMatchers("/users/**").hasRole("USER")   // 需要相应的角色才能访问
-//                .antMatchers("/admins/**").hasRole("ADMIN")   // 需要相应的角色才能访问
-//                .and()
-//                .formLogin();  //基于 Form 表单登录验证
-////                .loginPage("/login").failureUrl("/login-error");  // 自定义登录界面
-//    }
-
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .logout().permitAll()
+                .and()
+                .formLogin();
+        http.csrf().disable();
+    }
 
 
     /**
