@@ -1,7 +1,10 @@
 server:
-  port: 8082
+  port: 10001
 
 spring:
+  application:
+    name: uaa-service
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost/security_test?useSSL=false&serverTimezone=UTC
@@ -15,3 +18,5 @@ spring:
 mybatis:
   typeAliasesPackage: com.guonl.model
   mapperLocations: classpath*:mapper/*Mapper.xml
+
+

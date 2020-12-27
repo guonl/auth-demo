@@ -26,6 +26,14 @@ public class UserController {
         return "home";
     }
 
+    @RequestMapping("/allow")
+    public String allow(Model model) {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info("当前登陆用户：" + name);
+        model.addAttribute("name",name);
+        return "home";
+    }
+
 
     @RequestMapping("/login/error")
     public void loginError(HttpServletRequest request, HttpServletResponse response) {
@@ -51,6 +59,13 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_USER')")
     public String printUser() {
         return "如果你看见这句话，说明你有ROLE_USER角色";
+    }
+
+    @RequestMapping("/delete")
+    @ResponseBody
+    @PreAuthorize("hasAnyAuthority('user:delete')")
+    public String deleteUser() {
+        return "如果你看见这句话，说明你有user:delete角色";
     }
 
 
