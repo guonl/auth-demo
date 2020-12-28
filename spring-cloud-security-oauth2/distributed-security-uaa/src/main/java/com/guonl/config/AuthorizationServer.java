@@ -88,7 +88,7 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints
-//                .authenticationManager(authenticationManager)//密码授权模式
+                .authenticationManager(authenticationManager)//密码授权模式
                 .authorizationCodeServices(authorizationCodeServices)//授权码模式
                 .tokenServices(tokenService())//令牌管理服务
                 .allowedTokenEndpointRequestMethods(HttpMethod.POST);

@@ -7,6 +7,7 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -41,29 +42,32 @@ public class UserController {
         return "unauth";
     }
 
-    //    @RequiresRoles("admin,customer")
-    @RequestMapping("/auth")
-    public String auth(ModelMap mmap) {
-        mmap.put("msg", "测试页面标签");
-        return "auth";
-    }
 
     @RequiresRoles("admin")
     @GetMapping("/admin")
     @ResponseBody
-    public String admin() {
-        return "admin success";
+    public ResponseEntity admin() {
+        Object principal = SecurityUtils.getSubject().getPrincipal();
+        return ResponseEntity.ok(principal);
     }
 
-    @RequiresPermissions("user:edit")
+    @RequiresRoles("user")
+    @GetMapping("/user")
+    @ResponseBody
+    public ResponseEntity user() {
+        Object principal = SecurityUtils.getSubject().getPrincipal();
+        return ResponseEntity.ok(principal);
+    }
+
+    @RequiresPermissions("user:add")
     @GetMapping("/save")
     @ResponseBody
     public String save() {
-        return "edit success";
+        return "save success";
     }
 
     @RequiresPermissions("user:edit")
-    @GetMapping("/edit")
+    @GetMapping("/update")
     @ResponseBody
     public String edit() {
         return "edit success";

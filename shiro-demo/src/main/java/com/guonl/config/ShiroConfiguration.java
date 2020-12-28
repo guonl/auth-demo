@@ -47,13 +47,14 @@ public class ShiroConfiguration {
         filterChainDefinitionMap.put("/index", "authc");
         filterChainDefinitionMap.put("/loginUser", "anon");
 //        filterChainDefinitionMap.put("/admin", "roles[admin]");
-//        filterChainDefinitionMap.put("/edit", "perms[user:edit]");
-//        filterChainDefinitionMap.put("/save", "perms[user:save]");
+//        filterChainDefinitionMap.put("/update", "perms[user:edit]");
+//        filterChainDefinitionMap.put("/save", "perms[user:add]");
         filterChainDefinitionMap.put("/**", "user");
         bean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         //添加shiro过滤器
         Map<String, Filter> filters = new LinkedHashMap<String, Filter>();
+        //可以添加自定义的一些过滤器  eg:AccessControlFilter  PathMatchingFilter
         bean.setFilters(filters);
 
         return bean;
@@ -84,19 +85,27 @@ public class ShiroConfiguration {
         return authRealm;
     }
 
+    /**
+     * 加密与比较
+     * @return
+     */
     @Bean("credentialMatcher")
     public CredentialMatcher credentialMatcher() {
         return new CredentialMatcher();
     }
 
     /**
-     * thymeleaf模板引擎和shiro框架的整合
+     * thymeleaf 权限注解生效
      */
     @Bean
     public ShiroDialect shiroDialect() {
         return new ShiroDialect();
     }
 
+
+    /**
+     * shiro权限注解生效
+     */
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(@Qualifier("securityManager") SecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor advisor = new AuthorizationAttributeSourceAdvisor();
@@ -110,4 +119,6 @@ public class ShiroConfiguration {
         creator.setProxyTargetClass(true);
         return creator;
     }
+
+
 }
